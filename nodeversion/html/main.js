@@ -5,6 +5,7 @@ var numberExchangeCode = '';
 function startApp(){
 	applyClickHandlers();
 	getExchangeCode();
+	console.log('Start App: ', numberExchangeCode);
 }
 
 function applyClickHandlers(){
@@ -20,6 +21,7 @@ function getExchangeCode(){
 			max: 10
 		}
 	}).then( function (response) {
+		console.log('Then: ', response)
 		if (response.success) {
 			numberExchangeCode = response.code;
 		}
@@ -29,7 +31,7 @@ function getExchangeCode(){
 function getCurrentNumber() {
 	return $.ajax({
 		method: 'post',
-		url: 'getNumber',
+		url: '/getNumber',
 		dataType: 'json',
 		data: {
 			exchangeCode: numberExchangeCode,
