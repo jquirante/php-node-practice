@@ -75,7 +75,7 @@ webserver.post('/getNumber', (request, response) => {
     } 
     code = code.replace(/["']/g, '\\"');
     db.connect( () => {
-        const query = "SELECT * FROM currentNumber WHERE `numberCode`="+code+""
+        const query = "SELECT * FROM `currentNumber` WHERE `numberCode`='"+code+"'"
         db.query(query, (error, data) => {
             if (!error) {
                 if(data.length > 0) {
