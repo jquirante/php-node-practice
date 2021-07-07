@@ -30,15 +30,17 @@ function generateRandomNumber(min=0, max=10, whole=true) {
 }
 
 webserver.get('/generateNumber', (request, response) => {
-    
+    // console.log('Generate Number Req: ', request)
+    // console.log('Generate Number: ', response);
     const min = request.query.min;
     const max = request.query.max;
     const uniqueID = generateID();
-    console.log(uniqueID);
+    console.log('Unique ID: ', uniqueID);
     const randomNumber = generateRandomNumber(min,max);
+    console.log('Random Number: ', randomNumber);
     db.connect( () => {
-        const query = "INSERT INTO currentNumber SET number="+randomNumber+", numberCode="+uniqueID+"" ;
-        console.log(query);
+        const query = "INSERT INTO `currentNumber` SET `number`="+randomNumber+", numberCode='"+uniqueID+"'" ;
+        console.log('Query: ',query);
         db.query (query, (error) => {
             if(!error) {
                 const output = {
@@ -59,7 +61,10 @@ webserver.get('/generateNumber', (request, response) => {
 })
 
 webserver.post('/getNumber', (request, response) => {
+    debugger;
     let code =  request.body.exchangeCode;
+    console.log('Request: ', request.body);
+    console.log('code: ', code);
 
     if (!code) {
         response.send({
@@ -70,7 +75,7 @@ webserver.post('/getNumber', (request, response) => {
     } 
     code = code.replace(/["']/g, '\\"');
     db.connect( () => {
-        const query = "SELECT * FROM currentNumber WHERE numberCode='"+code+"'"
+        const query = "SELECT * FROM `currentNumber` WHERE `numberCode`='"+code+"'"
         db.query(query, (error, data) => {
             if (!error) {
                 if(data.length > 0) {
@@ -89,11 +94,12 @@ webserver.post('/getNumber', (request, response) => {
                     success: false,
                     error: 'error in db:'+error
                 })
-    }
-
-    )
+            }
+        
+    
+        })
+    })
 })
-
 webserver.listen(3500, () => {
     console.log('server is running on port 3500');
 })
